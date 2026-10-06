@@ -100,12 +100,29 @@
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 48px; }
     .grid p { color: var(--mute); }
 
+
+    /* ai tools */
+    .tools { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; }
+    .tools li { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 8px; border: 1px solid var(--line); border-radius: 8px; text-align: center; transition: border-color .12s, transform .12s; }
+    .tools li:hover { border-color: var(--ink); transform: translateY(-2px); }
+    .tools img { width: 32px; height: 32px; }
+    .tools span { color: var(--mute); }
+    @media (prefers-color-scheme: dark) { .tools img.mono { filter: invert(1); } }
+
+
+    /* hugeicons */
+    .ico { display: block; width: 24px; height: 24px; margin-bottom: 12px; color: var(--ink); }
+    .ico svg, .tick svg, .ico-inline svg { display: block; width: 100%; height: 100%; }
+    .ico-inline { display: inline-block; width: 16px; height: 16px; margin-right: 8px; vertical-align: -3px; }
+    .tick { display: inline-block; width: 16px; height: 16px; margin-right: 10px; vertical-align: -3px; color: var(--accent); }
+    .term button { display: inline-flex; align-items: center; }
+    .term button .ico-inline { margin-right: 6px; vertical-align: 0; width: 14px; height: 14px; }
+
     /* pricing */
     .pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
     .pricing ul { list-style: none; margin: 0; padding: 0; }
     .pricing li { padding: 10px 0; border-bottom: 1px solid var(--line); }
     .pricing li:first-child { padding-top: 0; }
-    .pricing li::before { content: "+ "; color: var(--accent); font-weight: 600; }
 
     /* faq */
     details { border-bottom: 1px solid var(--line); padding-block: 16px; }
@@ -132,6 +149,7 @@
       .hero { grid-template-columns: 1fr; padding-block: 32px 48px; gap: 32px; }
       .hero img { width: 140px; order: -1; }
       .grid, .pricing { grid-template-columns: 1fr; gap: 24px; }
+      .tools { grid-template-columns: repeat(3, 1fr); }
       nav a.hide-sm { display: none; }
     }
   </style>
@@ -154,7 +172,7 @@
           <p class="lead rise">Start it from the menu bar. Point your app at <code>localhost</code>. Your files stay on your own disk.</p>
           <div class="cta rise">
             <a class="btn primary" href="https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT">Buy a license · $9</a>
-            <a class="btn" href="https://github.com/s3box-app/s3box-releases/releases/latest">Download for macOS</a>
+            <a class="btn" href="https://github.com/s3box-app/s3box-releases/releases/latest"><span class="ico-inline"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.99969 17.0002C2.99969 17.9302 2.99969 18.3952 3.10192 18.7767C3.37932 19.8119 4.18796 20.6206 5.22324 20.898C5.60474 21.0002 6.06972 21.0002 6.99969 21.0002L16.9997 21.0002C17.9297 21.0002 18.3947 21.0002 18.7762 20.898C19.8114 20.6206 20.6201 19.8119 20.8975 18.7767C20.9997 18.3952 20.9997 17.9302 20.9997 17.0002" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M16.4998 11.5002C16.4998 11.5002 13.1856 16.0002 11.9997 16.0002C10.8139 16.0002 7.49976 11.5002 7.49976 11.5002M11.9997 15.0002V3.00016" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span>Download for macOS</a>
           </div>
           <p class="fine rise">macOS 14 or later · Apple silicon and Intel · One-time payment</p>
         </div>
@@ -164,7 +182,7 @@
       <section>
         <h2>Works with the tools you have</h2>
         <div class="term">
-          <button type="button" data-copy aria-label="Copy commands">Copy</button>
+          <button type="button" data-copy aria-label="Copy commands"><span class="ico-inline"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.5 14.5C7.5 11.2002 7.5 9.55025 8.52513 8.52513C9.55025 7.5 11.2002 7.5 14.5 7.5C17.7998 7.5 19.4497 7.5 20.4749 8.52513C21.5 9.55025 21.5 11.2002 21.5 14.5C21.5 17.7998 21.5 19.4497 20.4749 20.4749C19.4497 21.5 17.7998 21.5 14.5 21.5C11.2002 21.5 9.55025 21.5 8.52513 20.4749C7.5 19.4497 7.5 17.7998 7.5 14.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M7.5 16.5C6.10355 16.5 5.40533 16.5 4.84402 16.3036C3.83866 15.9518 3.0482 15.1613 2.69641 14.156C2.5 13.5947 2.5 12.8964 2.5 11.5V9.5C2.5 6.20017 2.5 4.55025 3.52513 3.52513C4.55025 2.5 6.20017 2.5 9.5 2.5H11.5C12.8964 2.5 13.5947 2.5 14.156 2.69641C15.1613 3.0482 15.9518 3.83866 16.3036 4.84402C16.5 5.40533 16.5 6.10355 16.5 7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><span data-label>Copy</span></button>
 <pre id="snippet"><span class="c"># S3Box runs on localhost:9000</span>
 export AWS_ACCESS_KEY_ID=s3box
 export AWS_SECRET_ACCESS_KEY=s3box-secret
@@ -180,12 +198,28 @@ aws --endpoint-url http://localhost:9000 s3 ls s3://my-bucket/</pre>
       <section id="features">
         <h2>What you get</h2>
         <div class="grid">
-          <div><h3>Lives in the menu bar</h3><p>Start, stop, and copy the endpoint in one click. It can start at login.</p></div>
-          <div><h3>Real S3 requests</h3><p>Signed requests, presigned URLs, buckets, and objects. The calls your app already makes.</p></div>
-          <div><h3>A native file browser</h3><p>Browse folders, drag files in to upload, download, delete, and copy a temporary link.</p></div>
-          <div><h3>Accounts and buckets</h3><p>Make keys for each app. Limit an account to some buckets, or make it read-only.</p></div>
-          <div><h3>Works with Claude</h3><p>An MCP server lets Claude list, read, and upload files. Turn it off, or make it read-only.</p></div>
-          <div><h3>Updates itself</h3><p>New versions are checked, verified, and installed from the app.</p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5L20 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M4 12L20 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M4 19L20 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Lives in the menu bar</h3><p>Start, stop, and copy the endpoint in one click. It can start at login.</p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 4H5C4.06812 4 3.60218 4 3.23463 4.15224C2.74458 4.35523 2.35523 4.74458 2.15224 5.23463C2 5.60218 2 6.06812 2 7C2 7.93188 2 8.39782 2.15224 8.76537C2.35523 9.25542 2.74458 9.64477 3.23463 9.84776C3.60218 10 4.06812 10 5 10H19C19.9319 10 20.3978 10 20.7654 9.84776C21.2554 9.64477 21.6448 9.25542 21.8478 8.76537C22 8.39782 22 7.93188 22 7C22 6.06812 22 5.60218 21.8478 5.23463C21.6448 4.74458 21.2554 4.35523 20.7654 4.15224C20.3978 4 19.9319 4 19 4Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M19 14H5C4.06812 14 3.60218 14 3.23463 14.1522C2.74458 14.3552 2.35523 14.7446 2.15224 15.2346C2 15.6022 2 16.0681 2 17C2 17.9319 2 18.3978 2.15224 18.7654C2.35523 19.2554 2.74458 19.6448 3.23463 19.8478C3.60218 20 4.06812 20 5 20H19C19.9319 20 20.3978 20 20.7654 19.8478C21.2554 19.6448 21.6448 19.2554 21.8478 18.7654C22 18.3978 22 17.9319 22 17C22 16.0681 22 15.6022 21.8478 15.2346C21.6448 14.7446 21.2554 14.3552 20.7654 14.1522C20.3978 14 19.9319 14 19 14Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M6.125 7H6M6.25 7C6.25 7.13807 6.13807 7.25 6 7.25C5.86193 7.25 5.75 7.13807 5.75 7C5.75 6.86193 5.86193 6.75 6 6.75C6.13807 6.75 6.25 6.86193 6.25 7Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M10.125 7H10M10.25 7C10.25 7.13807 10.1381 7.25 10 7.25C9.86193 7.25 9.75 7.13807 9.75 7C9.75 6.86193 9.86193 6.75 10 6.75C10.1381 6.75 10.25 6.86193 10.25 7Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M6.125 17H6M6.25 17C6.25 17.1381 6.13807 17.25 6 17.25C5.86193 17.25 5.75 17.1381 5.75 17C5.75 16.8619 5.86193 16.75 6 16.75C6.13807 16.75 6.25 16.8619 6.25 17Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M10.125 17H10M10.25 17C10.25 17.1381 10.1381 17.25 10 17.25C9.86193 17.25 9.75 17.1381 9.75 17C9.75 16.8619 9.86193 16.75 10 16.75C10.1381 16.75 10.25 16.8619 10.25 17Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Real S3 requests</h3><p>Signed requests, presigned URLs, buckets, and objects. The calls your app already makes.</p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 7H16.75C18.8567 7 19.91 7 20.6667 7.50559C20.9943 7.72447 21.2755 8.00572 21.4944 8.33329C22 9.08996 22 10.1433 22 12.25C22 15.7612 22 17.5167 21.1573 18.7779C20.7926 19.3238 20.3238 19.7926 19.7779 20.1573C18.5167 21 16.7612 21 13.25 21H12C7.28595 21 4.92893 21 3.46447 19.5355C2 18.0711 2 15.714 2 11V7.94427C2 6.1278 2 5.21956 2.38032 4.53806C2.65142 4.05227 3.05227 3.65142 3.53806 3.38032C4.21956 3 5.1278 3 6.94427 3C8.10802 3 8.6899 3 9.19926 3.19101C10.3622 3.62712 10.8418 4.68358 11.3666 5.73313L12 7" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/></svg></span><h3>A native file browser</h3><p>Browse folders, drag files in to upload, download, delete, and copy a temporary link.</p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15.5 14.5C18.8137 14.5 21.5 11.8137 21.5 8.5C21.5 5.18629 18.8137 2.5 15.5 2.5C12.1863 2.5 9.5 5.18629 9.5 8.5C9.5 9.38041 9.68962 10.2165 10.0303 10.9697L2.5 18.5V21.5H5.5V19.5H7.5V17.5H9.5L13.0303 13.9697C13.7835 14.3104 14.6196 14.5 15.5 14.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M17.5 6.5L16.5 7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Accounts and buckets</h3><p>Make keys for each app. Limit an account to some buckets, or make it read-only.</p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/><path d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Works with your AI tools</h3><p>An MCP server lets Claude, Cursor, Codex, and more list, read, and upload files. Turn it off, or make it read-only.</p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.4879 15C19.2524 18.4956 15.9187 21 12 21C7.02943 21 3 16.9706 3 12C3 7.02943 7.02943 3 12 3C15.7292 3 18.9286 5.26806 20.2941 8.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M15 9H18C19.4142 9 20.1213 9 20.5607 8.56066C21 8.12132 21 7.41421 21 6V3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Updates itself</h3><p>New versions are checked, verified, and installed from the app.</p></div>
+        </div>
+      </section>
+
+      <section id="ai">
+        <h2>Let your AI tools use it</h2>
+        <ul class="tools">
+          <li><img src="assets/agents/claude-color.svg" alt="" width="32" height="32"><span>Claude</span></li>
+          <li><img class="mono" src="assets/agents/cursor-color.svg" alt="" width="32" height="32"><span>Cursor</span></li>
+          <li><img src="assets/agents/codex-color.svg" alt="" width="32" height="32"><span>Codex</span></li>
+          <li><img src="assets/agents/copilot-color.svg" alt="" width="32" height="32"><span>Copilot</span></li>
+          <li><img src="assets/agents/gemini-color.svg" alt="" width="32" height="32"><span>Gemini</span></li>
+          <li><img src="assets/agents/antigravity-color.svg" alt="" width="32" height="32"><span>Antigravity</span></li>
+        </ul>
+        <p class="mute" style="margin-top:20px">S3Box includes a standard MCP server that runs as a local command. Add it to any app that supports MCP. For Claude Code, the app gives you the exact command to copy.</p>
+        <div class="term" style="margin-top:16px">
+<pre>claude mcp add s3box -- "/Applications/S3Box.app/Contents/MacOS/s3box-mcp"</pre>
         </div>
       </section>
 
@@ -200,10 +234,10 @@ aws --endpoint-url http://localhost:9000 s3 ls s3://my-bucket/</pre>
             </div>
           </div>
           <ul>
-            <li>One license covers 3 Macs</li>
-            <li>1 year of updates</li>
-            <li>The version you have keeps working after that</li>
-            <li>Free up a Mac any time in the license portal</li>
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 14L8.5 17.5L19 6.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span>One license covers 3 Macs</li>
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 14L8.5 17.5L19 6.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span>1 year of updates</li>
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 14L8.5 17.5L19 6.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span>The version you have keeps working after that</li>
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 14L8.5 17.5L19 6.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span>Free up a Mac any time in the license portal</li>
           </ul>
         </div>
       </section>
@@ -250,9 +284,10 @@ aws --endpoint-url http://localhost:9000 s3 ls s3://my-bucket/</pre>
     document.querySelector("[data-copy]").addEventListener("click", async (event) => {
       const button = event.currentTarget;
       const text = document.getElementById("snippet").textContent;
-      try { await navigator.clipboard.writeText(text); button.textContent = "Copied"; }
-      catch { button.textContent = "Press ⌘C"; }
-      setTimeout(() => (button.textContent = "Copy"), 1600);
+      const label = button.querySelector("[data-label]");
+      try { await navigator.clipboard.writeText(text); label.textContent = "Copied"; }
+      catch { label.textContent = "Press ⌘C"; }
+      setTimeout(() => (label.textContent = "Copy"), 1600);
     });
   </script>
 </body>
