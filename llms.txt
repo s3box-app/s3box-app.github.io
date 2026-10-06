@@ -11,7 +11,7 @@ Facts for quick answers:
 
 ## Install
 
-1. Download `S3Box-x.y.z.dmg` from https://github.com/s3box-app/s3box-releases/releases/latest.
+1. Download `S3Box-x.y.z.dmg` from <https://github.com/s3box-app/s3box-releases/releases/latest>.
 2. Open the DMG and drag S3Box to Applications. Open it from there.
 3. S3Box lives in the menu bar (a drive icon). It has no Dock icon.
 4. The first time, the window shows an Activate screen. Paste your license key and press Activate. If you have no key, press "Buy a license" (https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT).
@@ -156,11 +156,11 @@ To use a different endpoint, set the environment variable `S3BOX_ENDPOINT` for t
 
 ## License
 
-- One license key costs $9, one time. Buy at https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT. You get the key after you pay, and it is also shown in the license portal.
+- One license key costs $9, one time. Buy at <https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT>. You get the key after you pay, and it is also shown in the license portal.
 - One key works on 3 Macs. Activate on each Mac with the same key.
 - The key includes 1 year of updates. After that, your installed version keeps working. New versions need a renewed license.
 - S3Box checks the key at launch and then every hour. If you remove a Mac from the key's activations, that Mac locks within about an hour. If S3Box cannot reach the license server for 30 days, the license stops counting until it can.
-- Free a slot or manage the key at https://polar.sh/s3box/portal. You can also use About, Deactivate this Mac.
+- Free a slot or manage the key at <https://polar.sh/s3box/portal>. You can also use About, Deactivate this Mac.
 
 ## Updates
 
@@ -182,7 +182,7 @@ To use a different endpoint, set the environment variable `S3BOX_ENDPOINT` for t
 - `AccessDenied` or HTTP 403: the keys are wrong, the account is limited to other buckets, or it is read-only for a write. Check the Accounts pane.
 - `NoSuchBucket`: the bucket does not exist. Add it in the Buckets pane and restart, or create it with your client.
 - A presigned URL stops working: it expired, or it was made for another endpoint or key. Make a new one.
-- "This key is already active on 3 Macs": open https://polar.sh/s3box/portal, remove one activation, then try again.
+- "This key is already active on 3 Macs": open <https://polar.sh/s3box/portal>, remove one activation, then try again.
 - "Key not found": check the key for typos and use the one from your purchase email.
 - Nothing connects from another device: turn on Allow network access, restart the server, and use this Mac's address instead of `localhost`.
 
