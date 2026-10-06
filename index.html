@@ -203,6 +203,22 @@
         <img src="assets/icon-512.png" alt="S3Box icon: an open orange box" width="260" height="260">
       </div>
 
+      <section id="ai">
+        <h2>Let your AI tools use it</h2>
+        <ul class="tools">
+          <li><img src="assets/agents/claude-color.svg" alt="" width="32" height="32"><span>Claude</span></li>
+          <li><img class="mono" src="assets/agents/cursor-color.svg" alt="" width="32" height="32"><span>Cursor</span></li>
+          <li><img src="assets/agents/codex-color.svg" alt="" width="32" height="32"><span>Codex</span></li>
+          <li><img src="assets/agents/copilot-color.svg" alt="" width="32" height="32"><span>Copilot</span></li>
+          <li><img src="assets/agents/gemini-color.svg" alt="" width="32" height="32"><span>Gemini</span></li>
+          <li><img src="assets/agents/antigravity-color.svg" alt="" width="32" height="32"><span>Antigravity</span></li>
+        </ul>
+        <p class="mute" style="margin-top:20px">S3Box includes a standard MCP server that runs as a local command. Add it to any app that supports MCP. For Claude Code, the app gives you the exact command to copy.</p>
+        <div class="term" style="margin-top:16px">
+<pre>claude mcp add s3box -- "/Applications/S3Box.app/Contents/MacOS/s3box-mcp"</pre>
+        </div>
+      </section>
+
       <section>
         <h2>Works with the tools you have</h2>
         <div class="term">
@@ -228,22 +244,6 @@ aws --endpoint-url http://localhost:9000 s3 ls s3://my-bucket/</pre>
           <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15.5 14.5C18.8137 14.5 21.5 11.8137 21.5 8.5C21.5 5.18629 18.8137 2.5 15.5 2.5C12.1863 2.5 9.5 5.18629 9.5 8.5C9.5 9.38041 9.68962 10.2165 10.0303 10.9697L2.5 18.5V21.5H5.5V19.5H7.5V17.5H9.5L13.0303 13.9697C13.7835 14.3104 14.6196 14.5 15.5 14.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M17.5 6.5L16.5 7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Accounts and buckets</h3><p>Make keys for each app. Limit an account to some buckets, or make it read-only.</p></div>
           <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/><path d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Works with your AI tools</h3><p>An MCP server lets Claude, Cursor, Codex, and more list, read, and upload files. Turn it off, or make it read-only.</p></div>
           <div><span class="ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.4879 15C19.2524 18.4956 15.9187 21 12 21C7.02943 21 3 16.9706 3 12C3 7.02943 7.02943 3 12 3C15.7292 3 18.9286 5.26806 20.2941 8.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M15 9H18C19.4142 9 20.1213 9 20.5607 8.56066C21 8.12132 21 7.41421 21 6V3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span><h3>Updates itself</h3><p>New versions are checked, verified, and installed from the app.</p></div>
-        </div>
-      </section>
-
-      <section id="ai">
-        <h2>Let your AI tools use it</h2>
-        <ul class="tools">
-          <li><img src="assets/agents/claude-color.svg" alt="" width="32" height="32"><span>Claude</span></li>
-          <li><img class="mono" src="assets/agents/cursor-color.svg" alt="" width="32" height="32"><span>Cursor</span></li>
-          <li><img src="assets/agents/codex-color.svg" alt="" width="32" height="32"><span>Codex</span></li>
-          <li><img src="assets/agents/copilot-color.svg" alt="" width="32" height="32"><span>Copilot</span></li>
-          <li><img src="assets/agents/gemini-color.svg" alt="" width="32" height="32"><span>Gemini</span></li>
-          <li><img src="assets/agents/antigravity-color.svg" alt="" width="32" height="32"><span>Antigravity</span></li>
-        </ul>
-        <p class="mute" style="margin-top:20px">S3Box includes a standard MCP server that runs as a local command. Add it to any app that supports MCP. For Claude Code, the app gives you the exact command to copy.</p>
-        <div class="term" style="margin-top:16px">
-<pre>claude mcp add s3box -- "/Applications/S3Box.app/Contents/MacOS/s3box-mcp"</pre>
         </div>
       </section>
 
