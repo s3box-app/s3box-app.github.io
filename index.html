@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S3Box · A local S3 server for your Mac</title>
+  <meta name="description" content="S3Box runs an S3-compatible server on your Mac. Start it from the menu bar, point your app at localhost, and keep your files on your own disk.">
+  <meta property="og:title" content="S3Box · A local S3 server for your Mac">
+  <meta property="og:description" content="Start it from the menu bar. Point your app at localhost. Files stay on your disk.">
+  <meta property="og:image" content="https://s3box-app.github.io/assets/icon-512.png">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16150f" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="assets/icon-512.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" href="assets/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: "Plex Mono"; src: url(assets/ibm-plex-mono-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Plex Mono"; src: url(assets/ibm-plex-mono-latin-600-normal.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+
+    :root {
+      --bg: #f5f3ee;
+      --ink: #1c1b18;
+      --mute: #7a766b;
+      --line: #dcd9cf;
+      --wash: #ebe8df;
+      --accent: #e4570f;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #16150f; --ink: #ece9df; --mute: #8d897c; --line: #2f2d25; --wash: #1f1e17; --accent: #ff7a33; }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 15px/1.6 "Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding-inline: 24px; }
+    a { color: inherit; }
+    a:hover { color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+    .mute { color: var(--mute); }
+
+    /* sizes: 15px everywhere, 36px for display */
+    h1, .price { font-size: 36px; line-height: 1.15; font-weight: 600; margin: 0; letter-spacing: -0.02em; }
+    h2 { font-size: 15px; font-weight: 600; margin: 0 0 20px; color: var(--mute); }
+    h3 { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+    p { margin: 0; }
+
+    header { display: flex; justify-content: space-between; align-items: center; padding-block: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; text-decoration: none; }
+    .brand img { width: 28px; height: 28px; }
+    nav { display: flex; gap: 24px; align-items: center; }
+    nav a { text-decoration: none; color: var(--mute); }
+    nav a:hover { color: var(--ink); }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 1px solid var(--ink);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--ink);
+      background: transparent;
+      transition: transform .12s, background .12s;
+    }
+    .btn:hover { color: var(--ink); background: var(--wash); transform: translateY(-1px); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn.primary:hover { color: #fff; background: var(--accent); filter: brightness(1.08); }
+    @media (prefers-color-scheme: dark) { .btn.primary, .btn.primary:hover { color: #16150f; } }
+
+    /* hero */
+    .hero { display: grid; grid-template-columns: 1fr 260px; gap: 48px; align-items: center; padding-block: 56px 72px; }
+    .hero p.lead { margin-top: 20px; max-width: 46ch; }
+    .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+    .fine { margin-top: 16px; color: var(--mute); }
+    .hero img { width: 100%; height: auto; display: block; animation: float 6s ease-in-out infinite; }
+    @keyframes float { 50% { transform: translateY(-8px); } }
+
+    section { padding-block: 48px; border-top: 1px solid var(--line); }
+
+    /* terminal */
+    .term { background: var(--wash); border-radius: 8px; padding: 20px 24px; position: relative; overflow-x: auto; }
+    .term pre { margin: 0; font: inherit; white-space: pre; }
+    .term .c { color: var(--mute); }
+    .term button {
+      position: absolute; top: 12px; right: 12px;
+      font: inherit; color: var(--mute); background: var(--bg);
+      border: 1px solid var(--line); border-radius: 4px; padding: 2px 10px; cursor: pointer;
+    }
+    .term button:hover { color: var(--ink); border-color: var(--ink); }
+
+    /* features */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 48px; }
+    .grid p { color: var(--mute); }
+
+    /* pricing */
+    .pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .pricing ul { list-style: none; margin: 0; padding: 0; }
+    .pricing li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .pricing li:first-child { padding-top: 0; }
+    .pricing li::before { content: "+ "; color: var(--accent); font-weight: 600; }
+
+    /* faq */
+    details { border-bottom: 1px solid var(--line); padding-block: 16px; }
+    details:first-of-type { border-top: 1px solid var(--line); }
+    summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--mute); }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 10px; color: var(--mute); max-width: 62ch; }
+
+    footer { padding-block: 40px 64px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--mute); }
+    footer a { text-decoration: none; }
+    footer div { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    /* entrance */
+    .rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+    .rise:nth-child(2) { animation-delay: .08s; }
+    .rise:nth-child(3) { animation-delay: .16s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+    @media (prefers-reduced-motion: reduce) { .rise, .hero img { animation: none; } html { scroll-behavior: auto; } }
+
+    @media (max-width: 720px) {
+      h1, .price { font-size: 30px; }
+      .hero { grid-template-columns: 1fr; padding-block: 32px 48px; gap: 32px; }
+      .hero img { width: 140px; order: -1; }
+      .grid, .pricing { grid-template-columns: 1fr; gap: 24px; }
+      nav a.hide-sm { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="#top"><img src="assets/icon-512.png" alt="" width="28" height="28">S3Box</a>
+      <nav>
+        <a class="hide-sm" href="#features">Features</a>
+        <a class="hide-sm" href="#faq">FAQ</a>
+        <a class="btn primary" href="https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT">Buy · $9</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <div class="hero">
+        <div>
+          <h1 class="rise">A local S3 server for your Mac.</h1>
+          <p class="lead rise">Start it from the menu bar. Point your app at <code>localhost</code>. Your files stay on your own disk.</p>
+          <div class="cta rise">
+            <a class="btn primary" href="https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT">Buy a license · $9</a>
+            <a class="btn" href="https://github.com/s3box-app/s3box-releases/releases/latest">Download for macOS</a>
+          </div>
+          <p class="fine rise">macOS 14 or later · Apple silicon and Intel · One-time payment</p>
+        </div>
+        <img src="assets/icon-512.png" alt="S3Box icon: an open orange box" width="260" height="260">
+      </div>
+
+      <section>
+        <h2>Works with the tools you have</h2>
+        <div class="term">
+          <button type="button" data-copy aria-label="Copy commands">Copy</button>
+<pre id="snippet"><span class="c"># S3Box runs on localhost:9000</span>
+export AWS_ACCESS_KEY_ID=s3box
+export AWS_SECRET_ACCESS_KEY=s3box-secret
+export AWS_DEFAULT_REGION=us-east-1
+
+aws --endpoint-url http://localhost:9000 s3 mb s3://my-bucket
+aws --endpoint-url http://localhost:9000 s3 cp photo.jpg s3://my-bucket/
+aws --endpoint-url http://localhost:9000 s3 ls s3://my-bucket/</pre>
+        </div>
+        <p class="mute" style="margin-top:16px">Any S3 SDK works. Use path-style access and point it at your local endpoint.</p>
+      </section>
+
+      <section id="features">
+        <h2>What you get</h2>
+        <div class="grid">
+          <div><h3>Lives in the menu bar</h3><p>Start, stop, and copy the endpoint in one click. It can start at login.</p></div>
+          <div><h3>Real S3 requests</h3><p>Signed requests, presigned URLs, buckets, and objects. The calls your app already makes.</p></div>
+          <div><h3>A native file browser</h3><p>Browse folders, drag files in to upload, download, delete, and copy a temporary link.</p></div>
+          <div><h3>Accounts and buckets</h3><p>Make keys for each app. Limit an account to some buckets, or make it read-only.</p></div>
+          <div><h3>Works with Claude</h3><p>An MCP server lets Claude list, read, and upload files. Turn it off, or make it read-only.</p></div>
+          <div><h3>Updates itself</h3><p>New versions are checked, verified, and installed from the app.</p></div>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <h2>Pricing</h2>
+        <div class="pricing">
+          <div>
+            <div class="price">$9</div>
+            <p class="mute" style="margin-top:8px">Pay once. No subscription.</p>
+            <div class="cta">
+              <a class="btn primary" href="https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT">Buy a license</a>
+            </div>
+          </div>
+          <ul>
+            <li>One license covers 3 Macs</li>
+            <li>1 year of updates</li>
+            <li>The version you have keeps working after that</li>
+            <li>Free up a Mac any time in the license portal</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Questions</h2>
+        <details>
+          <summary>What does it support?</summary>
+          <p>Create and list buckets, upload, download, head, and delete objects, list with prefixes and folders, and presigned URLs. Requests are signed with SigV4. It does not do multipart upload, versioning, or ACLs yet.</p>
+        </details>
+        <details>
+          <summary>Is it for production?</summary>
+          <p>No. S3Box is for local development and testing, so you can build against S3 without a cloud account or a network.</p>
+        </details>
+        <details>
+          <summary>Where are my files?</summary>
+          <p>In a folder on your Mac. You choose the folder in the Server settings. Nothing is uploaded anywhere.</p>
+        </details>
+        <details>
+          <summary>What does the app contact over the internet?</summary>
+          <p>The license server, to check your key, and GitHub, to look for new versions. Your files and keys stay on your Mac.</p>
+        </details>
+        <details>
+          <summary>What happens after the first year?</summary>
+          <p>Your version keeps working. New versions need a renewed license.</p>
+        </details>
+        <details>
+          <summary>What do I need to run it?</summary>
+          <p>A Mac with macOS 14 or later. Apple silicon and Intel are both supported.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 S3Box</p>
+      <div>
+        <a href="https://github.com/s3box-app/s3box-releases/releases">Releases</a>
+        <a href="https://polar.sh/s3box/portal">License portal</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelector("[data-copy]").addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      const text = document.getElementById("snippet").textContent;
+      try { await navigator.clipboard.writeText(text); button.textContent = "Copied"; }
+      catch { button.textContent = "Press ⌘C"; }
+      setTimeout(() => (button.textContent = "Copy"), 1600);
+    });
+  </script>
+</body>
+</html>
