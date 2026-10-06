@@ -1,0 +1,195 @@
+# S3Box
+
+> S3Box is a macOS menu bar app that runs an S3-compatible server on your Mac. Start it, point your app or SDK at `http://localhost:9000`, and your files are stored in a folder on your own disk. It is for local development and testing, not for production. It also includes an MCP server, so AI tools such as Claude, Cursor, and Codex can list, read, and upload files.
+
+Facts for quick answers:
+- Platform: macOS 14 or later. Apple silicon and Intel.
+- Price: $9, one time. One license covers 3 Macs and 1 year of updates. The version you have keeps working after the year ends.
+- Default endpoint: `http://localhost:9000`. Path-style addressing. Any region name works (use `us-east-1`).
+- A license key is required to start the server.
+- Website: https://s3box.mcnaveen.com
+
+## Install
+
+1. Download `S3Box-x.y.z.dmg` from https://github.com/s3box-app/s3box-releases/releases/latest.
+2. Open the DMG and drag S3Box to Applications. Open it from there.
+3. S3Box lives in the menu bar (a drive icon). It has no Dock icon.
+4. The first time, the window shows an Activate screen. Paste your license key and press Activate. If you have no key, press "Buy a license" (https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT).
+5. After activation the server starts at once.
+
+Keep the app in /Applications. Self-update needs to write to the folder where the app sits.
+
+## Use the menu bar
+
+Click the menu bar icon. The menu has:
+- A status line (Running with the endpoint, Stopped, or Failed with the reason).
+- Start Server / Stop Server. If you have no license it shows Activate License instead.
+- Copy Endpoint: copies `http://localhost:9000` (or your port).
+- Show Data Folder: opens the folder with your files in Finder.
+- Settings: opens the main window.
+- About S3Box and Check for Updates.
+- Quit S3Box. This also stops the server.
+
+The icon changes to a download arrow when an update is waiting.
+
+## Connect an app or SDK
+
+Use these values. On the first launch S3Box makes one account called ADMIN and one bucket called `my-bucket`. Read the real keys in Settings, Accounts.
+
+```sh
+export AWS_ACCESS_KEY_ID=<access key from the Accounts tab>
+export AWS_SECRET_ACCESS_KEY=<secret key from the Accounts tab>
+export AWS_DEFAULT_REGION=us-east-1
+
+aws --endpoint-url http://localhost:9000 s3 mb s3://my-bucket
+aws --endpoint-url http://localhost:9000 s3 cp photo.jpg s3://my-bucket/
+aws --endpoint-url http://localhost:9000 s3 ls s3://my-bucket/
+```
+
+For any AWS SDK set:
+- endpoint: `http://localhost:9000`
+- force path-style addressing (for example `forcePathStyle: true`, `UsePathStyle = true`, `addressing_style = path`)
+- region: `us-east-1`
+- credentials: the access key and secret key of an account from the Accounts tab
+
+If you remove every account, the server accepts requests without credentials. Do not do this when "Allow network access" is on.
+
+## Supported S3 operations
+
+Supported:
+- ListBuckets, CreateBucket, HeadBucket
+- ListObjects and ListObjectsV2 (with `prefix`, `delimiter`, and `max-keys`)
+- PutObject, GetObject, HeadObject, DeleteObject
+- Presigned GET and PUT URLs (SigV4 query signing)
+- Requests signed with AWS Signature Version 4
+
+Not supported:
+- Multipart upload, CopyObject, batch delete (DeleteObjects), range requests
+- Versioning, object tags, ACLs, CORS, lifecycle rules, encryption settings
+- DeleteBucket through the S3 API
+- Paging past 1000 keys in one listing (there are no continuation tokens)
+- Virtual-hosted-style addressing (use path-style only)
+
+## The main window
+
+Open it from the menu bar with Settings. The sidebar has these panes.
+
+### Server
+- Status, Start, Stop, Restart.
+- Port (default 9000).
+- Allow network access: off means only this Mac can connect (`127.0.0.1`). On means other devices on your network can connect too. Turn it on only if you need it, and use strong keys.
+- Data folder: where files are stored. Use Choose to change it.
+- Start server on launch, Check for updates automatically, Launch at login.
+- A banner "Changes need a server restart" appears after you change port, folder, network access, buckets, or accounts. Press Restart.
+
+### Files
+A native file browser for the running server.
+- Pick a bucket at the top. The plus button creates a new bucket.
+- The breadcrumb shows the folder. Double-click a folder to open it. S3 folders are key prefixes.
+- Upload with the Upload button, or drag files and folders onto the list.
+- Right-click a file for Download, Copy Presigned URL (valid for 1 hour), Copy Key, and Delete.
+- Select files and press Delete to remove them.
+- It shows up to 1000 entries per folder.
+
+### Accounts
+- Add Account makes a new account with fresh keys. New keys makes new random keys for an account.
+- Name: letters and digits only, and not used twice.
+- Access key must not contain a colon.
+- Buckets: pick which buckets the account can reach. "All buckets" means no limit.
+- Access: Read & write, or Read-only.
+- Changes need a server restart.
+
+### Buckets
+- Lists the buckets that S3Box creates every time the server starts.
+- Names: 3 to 63 characters, lowercase letters, digits, hyphens, and dots.
+- Remove only takes the name off the list. The files stay on disk.
+- Each row shows which accounts can reach that bucket.
+
+### MCP
+See the next section.
+
+### Logs
+The server output. Use it when the server fails to start.
+
+### Feedback
+A board where you can send ideas, vote, and comment.
+
+### About
+Version, license details, and update controls.
+
+## Use it with AI tools (MCP)
+
+S3Box includes `s3box-mcp`, a standard MCP server that runs as a local command (stdio). It reads your S3Box settings, so it uses your port and your account. The S3Box server must be running.
+
+Claude Code:
+```sh
+claude mcp add s3box -- "/Applications/S3Box.app/Contents/MacOS/s3box-mcp"
+```
+Remove it with `claude mcp remove s3box`. The MCP pane in S3Box has buttons that copy both commands with the right path.
+
+Other MCP apps (for example Cursor, Claude Desktop, Codex, and Copilot in VS Code): add a local stdio server with the same command. The common JSON form is:
+```json
+{
+  "mcpServers": {
+    "s3box": {
+      "command": "/Applications/S3Box.app/Contents/MacOS/s3box-mcp"
+    }
+  }
+}
+```
+The file name and place of this config depends on the app. Check that app's MCP documentation.
+
+Tools:
+- `server_status`: check that the server is reachable.
+- `list_buckets`, `create_bucket`
+- `list_objects`: one folder level, up to 1000 entries. Takes `bucket` and optional `prefix`.
+- `put_object`: upload text (`text`) or a local file (`file_path`) to `bucket` and `key`.
+- `get_object`: read a UTF-8 text object (up to 200 KB), or save any object to `save_to`.
+- `delete_object`
+- `presign_url`: temporary download link. Optional `expires_seconds` (default 3600).
+
+Controls in the MCP pane (they apply at once, with no restart):
+- Enable MCP tools: when off, every tool except `server_status` is refused.
+- Read-only: blocks `create_bucket`, `put_object`, and `delete_object`.
+
+To use a different endpoint, set the environment variable `S3BOX_ENDPOINT` for the MCP command.
+
+## License
+
+- One license key costs $9, one time. Buy at https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT. You get the key after you pay, and it is also shown in the license portal.
+- One key works on 3 Macs. Activate on each Mac with the same key.
+- The key includes 1 year of updates. After that, your installed version keeps working. New versions need a renewed license.
+- S3Box checks the key at launch and then every hour. If you remove a Mac from the key's activations, that Mac locks within about an hour. If S3Box cannot reach the license server for 30 days, the license stops counting until it can.
+- Free a slot or manage the key at https://polar.sh/s3box/portal. You can also use About, Deactivate this Mac.
+
+## Updates
+
+- S3Box checks for a new version once a day. You can also open About and press Check for Updates.
+- Press Install Update, then Relaunch Now. The app checks the new version's Apple Developer ID signature before it installs it.
+- Updates need an active license and an app that sits in a folder you can write to (normally /Applications).
+- If a new version came out after your 1-year update period, S3Box shows "Renew license" and does not install it.
+
+## Privacy
+
+- Your files, keys, and settings stay on your Mac.
+- S3Box contacts the license server (api.polar.sh) to check your key, and GitHub to look for new versions.
+- The Feedback pane connects to FeedbackJar (feedbackjar.com) when you use it.
+
+## Troubleshooting
+
+- Server will not start, and the status says "License required": activate a key (About, or the Activate screen).
+- Status says Failed and the Logs pane shows "address already in use": another program uses the port. Change the port in Server settings, or quit the other program.
+- `AccessDenied` or HTTP 403: the keys are wrong, the account is limited to other buckets, or it is read-only for a write. Check the Accounts pane.
+- `NoSuchBucket`: the bucket does not exist. Add it in the Buckets pane and restart, or create it with your client.
+- A presigned URL stops working: it expired, or it was made for another endpoint or key. Make a new one.
+- "This key is already active on 3 Macs": open https://polar.sh/s3box/portal, remove one activation, then try again.
+- "Key not found": check the key for typos and use the one from your purchase email.
+- Nothing connects from another device: turn on Allow network access, restart the server, and use this Mac's address instead of `localhost`.
+
+## Links
+
+- [Website](https://s3box.mcnaveen.com): features, pricing, and questions.
+- [Download](https://github.com/s3box-app/s3box-releases/releases/latest): the latest DMG.
+- [All releases](https://github.com/s3box-app/s3box-releases/releases): release notes for each version.
+- [Buy a license](https://buy.polar.sh/polar_cl_krPovPbsX9f9Rs23CDHccTjVaTGnFAU631QJv0M43IT): $9, one time.
+- [License portal](https://polar.sh/s3box/portal): manage your key and Macs.
